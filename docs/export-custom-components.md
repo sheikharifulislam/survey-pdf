@@ -68,7 +68,7 @@ To use this custom PDF brick, you need to configure a custom renderer. Create a 
 ```js
 import { FlatRepository, FlatQuestion } from "survey-pdf";
 
-/** Custom PDF brick configuration goes here */
+/* Custom PDF brick configuration goes here */
 
 class FlatCustomColor extends FlatQuestion {
   async generateFlatsContent(point) {

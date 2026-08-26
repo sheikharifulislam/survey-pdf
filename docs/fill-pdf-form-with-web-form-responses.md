@@ -34,7 +34,7 @@ Reference the `pdf-lib` script on your HTML page.
 Install the <a href="https://www.npmjs.com/package/pdf-lib" target="_blank">`pdf-lib`</a> npm package and import the entire `pdf-lib` module.
 
 ```sh
-npm install pdf-lib --save
+npm install pdf-lib
 ```
 
 ```js
@@ -73,7 +73,7 @@ Reference the PDF.js script on your HTML page and specify the path or URL to the
 Install the <a href="https://www.npmjs.com/package/pdfjs-dist" target="_blank">`pdfjs-dist`</a> npm package, import the entire `pdfjs-dist` module, and specify the path or URL to the PDF.js worker script.
 
 ```sh
-npm install pdfjs-dist --save
+npm install pdfjs-dist
 ```
 
 ```js
@@ -103,7 +103,7 @@ SurveyJS PDF Generator integrates with a third-party library using the [`PDFForm
 - Option 2: Install the <a href="https://www.npmjs.com/package/survey-pdf" target="_blank">`survey-pdf`</a> npm package and import `PDFFormFiller` from the `survey-pdf/pdf-form-filler` module.
 
     ```sh
-    npm install survey-pdf --save
+    npm install survey-pdf
     ```
 
     ```js

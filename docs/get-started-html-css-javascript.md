@@ -15,30 +15,22 @@ PDF Generator for SurveyJS is built upon the <a href="https://github.com/paralla
 ```html
 <head>
     <!-- jsPDF library -->
-    <script type="text/javascript" src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/jspdf/dist/jspdf.umd.min.js"></script>
 
     <!-- `survey-core` -->
-    <script type="text/javascript" src="https://unpkg.com/survey-core/survey.core.min.js"></script>
+    <script src="https://unpkg.com/survey-core/survey.core.min.js"></script>
 
     <!-- SurveyJS PDF Generator library -->
-    <script type="text/javascript" src="https://unpkg.com/survey-pdf/survey.pdf.min.js"></script>
+    <script src="https://unpkg.com/survey-pdf/survey.pdf.min.js"></script>
     <!-- ... -->
 </head>
 ```
 
-## Configure Export Properties
-
-Export properties allow you to customize the page format, orientation, margins, font, and other parameters. Refer to the [`IDocOptions`](/Documentation/Pdf-Export?id=idocoptions) interface for a full list of properties. The following code changes the [`fontSize`](/Documentation/Pdf-Export?id=idocoptions#fontSize) property:
-
-```js
-const pdfDocOptions = {
-    fontSize: 12
-};
-```
-
 ## Export a Survey
 
-To export a survey, you need to create a `SurveyPDF` instance. Its constructor accepts two parameters: a [survey JSON schema](/Documentation/Library?id=design-survey-create-a-simple-survey#define-a-static-survey-model-in-json) and [export properties](#configure-export-properties). To save a PDF document with the exported survey, call the [`save(fileName)`](/Documentation/Pdf-Export?id=surveypdf#save) method on the `SurveyPDF` instance. If you omit the `fileName` parameter, the document uses the default name (`"survey_result"`).
+To export a survey, you need to create a `SurveyPDF` instance. Its constructor accepts two parameters: a [survey JSON schema](/Documentation/Library?id=design-survey-create-a-simple-survey#define-a-static-survey-model-in-json) and optional [PDF document settings](/pdf-generator/documentation/api-reference/idocoptions).
+
+To save a PDF document with the exported survey, call the [`save(fileName)`](/Documentation/Pdf-Export?id=surveypdf#save) method on the `SurveyPDF` instance. If you omit the `fileName` parameter, the document uses the default name (`"survey_result"`).
 
 The code below implements a `savePdf` helper function that instantiates `SurveyPDF`, assigns survey data (user responses) to this instance, and calls the `save(fileName)` method. If you want to export the survey without user responses, do not specify the `SurveyPDF`'s `data` property.
 
@@ -54,7 +46,11 @@ const savePdf = function (surveyData) {
 };
 ```
 
-You can use any UI element to call this helper function. For instance, the following code adds a new [navigation button](/Documentation/Library?id=iaction) below the survey and calls the `savePdf` function when a user clicks this button:
+The following image illustrates a generated PDF form:
+
+<img src="images/nps-pdf-form.png" alt="SurveyJS PDF Generator: NPS PDF form" width="759" height="958">
+
+You can call this helper function from any UI element. The following example adds a custom [navigation button](/Documentation/Library?id=iaction) below the survey and exports the current survey state when users click the button.
 
 ```js
 const survey = new Survey.Model(surveyJson);
@@ -66,9 +62,37 @@ survey.addNavigationItem({
 });
 ```
 
-The following image illustrates the resulting UI with the [Default theme](https://surveyjs.io/form-library/documentation/manage-default-themes-and-styles) applied:
+The following image illustrates the resulting UI:
 
 <img src="images/surveypdf-navigation-button.png" alt="Export Survey to PDF - Save as PDF navigation button" width="772" height="404">
+
+## Customize the PDF Form
+
+If the default appearance of the exported form does not meet your requirements, use the following customization APIs to tailor the generated PDF document:
+
+- [PDF Form Settings](/pdf-generator/documentation/customize-pdf-form-settings)     
+Configure page orientation, fonts, compression, read-only mode, and other document-level settings.
+
+- [PDF Appearance Customization](/pdf-generator/documentation/pdf-appearance-customization)      
+Customize themes, layouts, and styles.
+
+- [Question Rendering](/pdf-generator/documentation/customize-survey-question-rendering-in-pdf-form)      
+Customize the rendering behavior of specific question types.
+
+In this tutorial, the exported PDF form uses the print-optimized Monochrome Light theme:
+
+```html
+<head>
+    <!-- ... -->
+     <script src="https://unpkg.com/survey-core/themes/monochrome-light.min.js"></script>
+     <!-- .. -->
+</head>
+```
+
+```js
+const surveyPdf = new SurveyPDF({ /* ... */ });
+surveyPdf.applyTheme(SurveyTheme.MonochromeLight);
+```
 
 <details>
     <summary>View Full Code</summary>  
@@ -80,16 +104,18 @@ The following image illustrates the resulting UI with the [Default theme](https:
     <title>Export Survey to PDF - SurveyJS</title>
     <meta charset="utf-8">
     <!-- jsPDF library -->
-    <script type="text/javascript" src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/jspdf/dist/jspdf.umd.min.js"></script>
 
-    <link href="https://unpkg.com/survey-core/survey-core.min.css" type="text/css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/survey-core/survey.core.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/survey-js-ui/survey-js-ui.min.js"></script>
+    <link href="https://unpkg.com/survey-core/survey-core.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/survey-core/survey.core.min.js"></script>
+    <script src="https://unpkg.com/survey-js-ui/survey-js-ui.min.js"></script>
+    <script src="https://unpkg.com/survey-core/themes/monochrome-light.min.js"></script>
+
 
     <!-- SurveyJS PDF Generator library -->
-    <script type="text/javascript" src="https://unpkg.com/survey-pdf/survey.pdf.min.js"></script>
+    <script src="https://unpkg.com/survey-pdf/survey.pdf.min.js"></script>
     
-    <script type="text/javascript" src="index.js"></script>
+    <script src="index.js"></script>
 </head>
 <body>
     <div id="surveyContainer"></div>
@@ -99,18 +125,108 @@ The following image illustrates the resulting UI with the [Default theme](https:
 
 ```js
 const surveyJson = {
-    // ...
+  "title": "NPS Survey Question",
+  "description": "NPS (net promoter score) is a metric used to evaluate customer loyalty and business growth opportunities. To measure NPS, respondents should rate on a scale of 0 to 10 how likely they would recommend your product or service to a friend or colleague.",
+  "pages": [
+    {
+      "name": "page1",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "nps-score",
+          "title": "On a scale from 0 to 10, how likely are you to recommend us to a friend or colleague?",
+          "rateMin": 0,
+          "rateMax": 10
+        },
+        {
+          "type": "comment",
+          "name": "disappointing-experience",
+          "title": "If your score is 0 to 5, how did we disappoint you and what can we do to improve?",
+          "maxLength": 300
+        },
+        {
+          "type": "comment",
+          "name": "improvements-required",
+          "title": "If your score is 6 or higher, what can we do to improve your experience?",
+          "maxLength": 300
+        },
+        {
+          "type": "checkbox",
+          "name": "promoter-features",
+          "title": "If your score is 9 or 10, which features do you value most?",
+          "description": "Select up to three features, if applicable.",
+          "choices": [
+            {
+              "value": "performance",
+              "text": "Performance"
+            },
+            {
+              "value": "stability",
+              "text": "Stability"
+            },
+            {
+              "value": "ui",
+              "text": "User interface"
+            },
+            {
+              "value": "complete-functionality",
+              "text": "Complete functionality"
+            },
+            {
+              "value": "learning-materials",
+              "text": "Learning materials"
+            },
+            {
+              "value": "support",
+              "text": "Support quality"
+            }
+          ],
+          "showOtherItem": true,
+          "otherText": "Other",
+          "colCount": 2,
+          "maxSelectedChoices": 3
+        }
+      ]
+    },
+    {
+      "name": "page2",
+      "elements": [
+        {
+          "type": "boolean",
+          "name": "rebuy",
+          "title": "Would you buy our product again?"
+        }
+      ]
+    },
+    {
+      "name": "page3",
+      "elements": [
+        {
+          "type": "boolean",
+          "name": "testimonial",
+          "title": "Would you be willing to provide a short testimonial?"
+        },
+        {
+          "type": "text",
+          "name": "email",
+          "title": "If yes, enter your email address",
+          "inputType": "email"
+        }
+      ]
+    }
+  ],
+  "questionsOnPageMode": "singlePage",
+  "headerView": "advanced"
 };
 
 const survey = new Survey.Model(surveyJson);
 
-const pdfDocOptions = {
-    fontSize: 12
-};
+const pdfDocOptions = { };
 
 const savePdf = function (surveyData) {
     const surveyPdf = new SurveyPDF.SurveyPDF(surveyJson, pdfDocOptions);
     surveyPdf.data = surveyData;
+    surveyPdf.applyTheme(SurveyTheme.MonochromeLight);
     surveyPdf.save();
 };
 
@@ -142,8 +258,7 @@ After purchasing a license, follow the steps below to activate it and remove the
 
 Once you've completed the setup correctly, the alert banner will no longer appear.
 
-## Further Reading
+## See Also
 
-- [Customization Options](/Documentation/Pdf-Export?id=Customization-Options)
-- [Export HTML to PDF](/Documentation/Pdf-Export?id=HtmlToPdf)
-- [Export Matrix Questions to PDF](/Documentation/Pdf-Export?id=MatrixToPdf)
+- [Fill PDF Form with Web Form Responses](/pdf-generator/documentation/fill-pdf-form-with-web-form-responses)
+- [PDF Generator Demos](/pdf-generator/examples/save-completed-forms-as-pdf-files/)

@@ -1,11 +1,11 @@
 ---
-title: Customize Survey Question Rendering in PDF Forms | SurveyJS PDF Generator
-description: Explore the APIs of SurveyJS PDF Generator to customize the rendering of survey questions in your PDF forms. Learn how to adjust HTML rendering, matrix rendering, image rendering, read-only question rendering, and even apply custom rendering for specific elements.
+title: Customize Survey Element Rendering in PDF Forms | SurveyJS PDF Generator
+description: Explore the APIs of SurveyJS PDF Generator to customize the rendering of survey elements in your PDF forms. Learn how to adjust HTML rendering, matrix rendering, image rendering, read-only question rendering, and even apply custom rendering for specific elements.
 ---
 
-# Customize Survey Questions in PDF
+# Customize Question Rendering in PDF
 
-SurveyJS PDF Generator is designed to render survey questions into PDF optimally. At the same time, our tool includes APIs that allow you to adjust and customize question rendering to PDF as per your requirements. This help topic gives an overview of these APIs.
+SurveyJS PDF Generator is designed to render survey elements into PDF optimally. At the same time, our tool includes APIs that allow you to adjust and customize element rendering to PDF according to your requirements. This help topic gives an overview of these APIs.
 
 ## HTML Rendering
 
@@ -50,11 +50,11 @@ const surveyJson = {
 
 **Matrix rendered as a table**
 
-<img src="images/matrix-render-as-table.png" alt="SurveyJS PDF Generator: Render a matrix as a table in a PDF form" width="772" height="285">
+<img src="images/matrix-render-as-table.png" alt="SurveyJS PDF Generator: Render a matrix as a table in a PDF form" width="772" height="583">
 
 **Matrix rendered as a list**
 
-<img src="images/matrix-render-as-list.png" alt="SurveyJS PDF Generator: Render a matrix as a list in a PDF form" width="772" height="436">
+<img src="images/matrix-render-as-list.png" alt="SurveyJS PDF Generator: Render a matrix as a list in a PDF form" width="772" height="649">
 
 If you want to render all matrices as lists, regardless of whether they fit into the page as tables or not, set the [`matrixRenderAs`](https://surveyjs.io/pdf-generator/documentation/api-reference/idocoptions#matrixRenderAs) property to `"list"`:
 
@@ -84,7 +84,7 @@ const surveyJson = {
 
 ## Image Rendering
 
-[Image questions](https://surveyjs.io/form-library/documentation/api-reference/add-image-to-survey) have an [imageFit](https://surveyjs.io/form-library/documentation/api-reference/add-image-to-survey#imageFit) property that specifies how images should fit into their containers. If exported images should apply this property, enable the [`applyImageFit`](https://surveyjs.io/pdf-generator/documentation/api-reference/idocoptions#applyImageFit) option. Please note that with this option, the quality of images may be lower because they pass through several conversions.
+[Image questions](https://surveyjs.io/form-library/documentation/api-reference/add-image-to-survey) have an [`imageFit`](https://surveyjs.io/form-library/documentation/api-reference/add-image-to-survey#imageFit) property that specifies how images should fit into their containers. If exported images should apply this property, enable the [`applyImageFit`](https://surveyjs.io/pdf-generator/documentation/api-reference/idocoptions#applyImageFit) option. Please note that with this option, the quality of images may be lower because they pass through several conversions.
 
 ```js
 const options = {
@@ -183,5 +183,3 @@ surveyPdf.onRenderQuestion.add((_, options) => {
 ```
 
 [View Example on Plunker](https://plnkr.co/edit/nuAYKonXro1apm8X (linkStyle))
-
-For more examples of question customizations, refer to the following demo: [Use Adorners](https://surveyjs.io/pdf-generator/examples/how-to-use-adorners-in-pdf-forms/).
